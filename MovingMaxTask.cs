@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace yield
@@ -21,7 +22,7 @@ namespace yield
     internal class DequeMovingMax<T>
         where T : IComparable<T>
     {
-        private LinkedList<T> dataValues = new LinkedList<T>();
+        private Queue<T> dataValues = new Queue<T>();
         private LinkedList<T> maxValues = new LinkedList<T>();
         private int windowWidth;
 
@@ -32,7 +33,7 @@ namespace yield
 
         public void EnqueueLast(T value)
         {
-            dataValues.AddLast(value);
+            dataValues.Enqueue(value);
             while (maxValues.Count > 0 && value.CompareTo(maxValues.Last.Value) > 0)
                 maxValues.RemoveLast();
             maxValues.AddLast(value);
@@ -41,14 +42,14 @@ namespace yield
         public T DequeueFirst()
         {
             var temp = maxValues.First.Value;
-            if (dataValues.First.Value.CompareTo(maxValues.First.Value) == 0
+            if (dataValues.Peek().CompareTo(maxValues.First.Value) == 0
                 && dataValues.Count == windowWidth)
             {
-                dataValues.RemoveFirst();
+                dataValues.Dequeue();
                 maxValues.RemoveFirst();
             }
             else if (dataValues.Count == windowWidth)
-                dataValues.RemoveFirst();
+                dataValues.Dequeue();
             return temp;
         }
     }
